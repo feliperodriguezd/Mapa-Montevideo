@@ -8,5 +8,7 @@ conn.request("POST", "https://mvdapi-auth.montevideo.gub.uy/auth/realms/pci/prot
 res = conn.getresponse()
 data = res.read()
 dataInString = data.decode("utf-8")
-token = dataInString[17:dataInString.index('","expires_in"')]
-print(token)
+if res.status == 200:
+    token = dataInString[17:dataInString.index('","expires_in"')]
+else:
+    print("Error al acceder a la api")
