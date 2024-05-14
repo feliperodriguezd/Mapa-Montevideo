@@ -14,7 +14,7 @@ ax.set_xlabel('Longitud')
 ax.set_ylabel('Latitud')
 
 
-paradas = open('paradas.json', encoding="utf8")
+paradas = open('Data/paradas.json', encoding="utf8")
 paradasData = json.load(paradas)
 
 for stop in paradasData:
@@ -22,7 +22,7 @@ for stop in paradasData:
     yCoordinate = stop["location"]["coordinates"][1]
     plt.plot(xCoordinate, yCoordinate, 'go', color='#14CBDD')
 
-omnibus = open('omnibus.json', encoding="utf8")
+omnibus = open('Data/omnibus.json', encoding="utf8")
 omnibusData = json.load(omnibus)
 
 for stop in omnibusData:
@@ -32,12 +32,12 @@ for stop in omnibusData:
         if yCoordinate < -34.7 and yCoordinate > -34.95:
             plt.plot(xCoordinate, yCoordinate, 'go', color='#DD14D1')
 
-geoJSONMontevideo = "montevideo.geojson"
+geoJSONMontevideo = "Data/montevideo.geojson"
 montevideo = gpd.read_file(geoJSONMontevideo)
 montevideo.head()
 montevideo.plot(ax=ax, zorder=0, color='green')
 
-geoJSONDirecciones = "direcciones.geojson"
+geoJSONDirecciones = "Data/direcciones.geojson"
 direcciones = gpd.read_file(geoJSONDirecciones)
 direcciones.head()
 direcciones.plot(ax=ax, zorder=0, color='red')
