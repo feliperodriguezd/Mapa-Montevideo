@@ -1,14 +1,17 @@
 import http.client
 import tokens
+import json
 
-conn = http.client.HTTPSConnection("api.montevideo.gub.uy")
+connection = http.client.HTTPSConnection("api.montevideo.gub.uy")
 payload = f'grant_type=client_credentials&client_id={tokens.clientID}&client_secret={tokens.secretClient}'
 headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-conn.request("POST", "https://mvdapi-auth.montevideo.gub.uy/auth/realms/pci/protocol/openid-connect/token", payload, headers)
-res = conn.getresponse()
-data = res.read()
-dataInString = data.decode("utf-8")
-if res.status == 200:
-    token = dataInString[17:dataInString.index('","expires_in"')]
+connection.request("POST", "https://mvdapi-auth.montevideo.gub.uy/auth/realms/pci/protocol/openid-connect/token", payload, headers)
+
+response = connection.getresponse()
+
+if response.status == 200:
+    data = response.read()
+    dataInJson = json.loads(data)
+    token = dataInJson['access_token']
 else:
     print("Error al acceder a la api")
