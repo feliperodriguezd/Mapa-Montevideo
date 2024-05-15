@@ -1,16 +1,60 @@
 import requests
-import getToken
 import json
+import Exceptions
 
 
-def UpdateDataBuses():
-    url = "https://api.montevideo.gub.uy/api/transportepublico/buses?access_token=" + getToken.token 
+def GeteAllBuses(token):
+    url = "https://api.montevideo.gub.uy/api/transportepublico/buses?access_token=" + token 
 
     payload = ''
     headers = ''
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    dataInJson = json.loads(response.content)
+    if response.status_code == 200:
+        dataInJson = json.loads(response.content)
+    else:
+        raise Exceptions.APIError
 
     with open('Data/omnibus.json', 'w') as fp:
         json.dump(dataInJson, fp)
+
+
+def GetNextBusesOfStop(stop, lines, token):
+    url = f"https://api.montevideo.gub.uy/api/transportepublico/buses/busstops/{stop}/upcomingbuses?lines={lines}&access_token=" + token 
+
+    payload = ''
+    headers = ''
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        dataInJson = json.loads(response.content)
+    else:
+        raise Exceptions.APIError
+
+    return dataInJson
+
+
+def GetLinesOfStop(stop, token):
+    url = f"https://api.montevideo.gub.uy/api/transportepublico/buses/busstops/{stop}/lines?&access_token=" + token 
+
+    payload = ''
+    headers = ''
+    response = requests.request("GET", url, headers=headers, data=payload)
+
+    if response.status_code == 200:
+        dataInJson = json.loads(response.content)
+    else:
+        raise Exceptions.APIError
+
+    return dataInJson
+
+def GetStop(stopId):
+
+    data = open(f'Data/paradas.json', encoding="utf8")
+    dataJson = json.load(data)
+
+    for stop in dataJson:
+        if stop['busstopId'] == stopId:
+            return stop
+    
+    return False
