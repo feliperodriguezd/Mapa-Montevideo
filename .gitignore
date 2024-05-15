@@ -1,6 +1,9 @@
 # Archivo con tokens
 tokens.py
 
+# Carpeta cache
+cache
+
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
