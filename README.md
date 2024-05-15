@@ -1,7 +1,9 @@
-# Mapas
+# Mapas Montevideo
 
-Se cuenta con un geojson de las calles de montevideo, un json tanto para las paradas y omnibus de montevideo que se extrae de la API de la intendencia de montevideo. 
+Este proyecto muestra un mapa con las calles de Montevideo con los ómnibus en circulación en ese momento y sus respectivas paradas.
 
-Todo esto se une y se muestra en un mapa.
+La información de las paradas y de los ómnibus es extraída de la API de la intendencia de Montevideo. 
 
-Proyecto en construcción.
+Se utilizan las librerías: request, http.client, json, matplotlib y geopandas.
+
+Proyecto en construcción. 
