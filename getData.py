@@ -2,12 +2,15 @@ import requests
 import getToken
 import json
 
-url = "https://api.montevideo.gub.uy/api/transportepublico/buses?access_token=" + getToken.token 
 
-payload = ''
-headers = ''
-response = requests.request("GET", url, headers=headers, data=payload)
+def UpdateDataBuses():
+    url = "https://api.montevideo.gub.uy/api/transportepublico/buses?access_token=" + getToken.token 
 
-dataInJson = json.loads(response.content)
+    payload = ''
+    headers = ''
+    response = requests.request("GET", url, headers=headers, data=payload)
 
-print(dataInJson[0])
+    dataInJson = json.loads(response.content)
+
+    with open('Data/omnibus.json', 'w') as fp:
+        json.dump(dataInJson, fp)
