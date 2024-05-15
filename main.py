@@ -3,7 +3,7 @@ import geopandas as gpd
 import json
 import getData
 
-def CreateMapThatNeedToBeLoop(name, color):
+def CreateMapFromJson(name, color):
     data = open(f'Data/{name}.json', encoding="utf8")
     dataJson = json.load(data)
 
@@ -15,7 +15,7 @@ def CreateMapThatNeedToBeLoop(name, color):
                 plt.plot(xCoordinate, yCoordinate, 'go', color=color)
 
 
-def CreateMapThatDontNeedToBeLoop(name):
+def CreateMapFromGeojson(name):
     geoJSONMontevideo = f"Data/{name}.geojson"
     montevideo = gpd.read_file(geoJSONMontevideo)
     montevideo.head()
@@ -34,8 +34,8 @@ ax.set_ylabel('Latitud')
 
 
 getData.UpdateDataBuses()
-CreateMapThatNeedToBeLoop('omnibus', 'red')
-CreateMapThatNeedToBeLoop('paradas', 'blue')
-CreateMapThatDontNeedToBeLoop('montevideoStreets')
+CreateMapFromJson('omnibus', 'red')
+CreateMapFromJson('paradas', 'blue')
+CreateMapFromGeojson('montevideoStreets')
 
 plt.show()
