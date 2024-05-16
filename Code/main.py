@@ -5,35 +5,47 @@ import getToken
 import Exceptions
 
 def draw_line(points):
-    x_values = [point[0] for point in points]
-    y_values = [point[1] for point in points]
-    plt.plot(x_values, y_values, marker='o')
+    xValues = [point[0] for point in points]
+    yValues = [point[1] for point in points]
+    plt.plot(xValues, yValues, color='green')
 
-def CreateMapFromJson(data, color):
+def IsInsideMontevideo(XorY, coordinate):
+    if XorY == 'x':
+        return coordinate < -55.9 and coordinate > -56.5
+    else:
+        return coordinate < -34.7 and coordinate > -34.95
+
+def CreateFromJson(data, color):
     for singleData in data:
         xCoordinate = singleData["location"]["coordinates"][0]
         yCoordinate = singleData["location"]["coordinates"][1]
-        if xCoordinate < -55.9 and xCoordinate > -56.5:
-            if yCoordinate < -34.7 and yCoordinate > -34.95:
+        if IsInsideMontevideo('x', xCoordinate):
+            if IsInsideMontevideo('y', yCoordinate):
                 plt.plot(xCoordinate, yCoordinate, 'o', color=color)
 
-def CreateMapFromGeojson(name, stopCoordinates):
+def IsNearStop(stopCoordinate, compareCoordinate):
+    return compareCoordinate < stopCoordinate + 0.03 and compareCoordinate > stopCoordinate - 0.03
+
+def AllThePointsAreNear(coordinate, points):
+    return len(coordinate) == len(points)
+
+def CreateFromGeojson(name, stopCoordinates):
     geoJSONMontevideo = f"Code/Data/{name}.geojson"
     montevideo = gpd.read_file(geoJSONMontevideo)
     data = gpd.GeoDataFrame.from_features(montevideo)
-    print('Listo carga de datos')
+    print('Listo carga de datos de Montevideo')
     for feature in data.iterfeatures():
         coordinate = feature['geometry']['coordinates']
         points = []
         for cor in coordinate:
-            if cor[0] < stopCoordinates[0] + 0.03 and cor[0] > stopCoordinates[0] - 0.03:
-                if cor[1] < stopCoordinates[1] + 0.03 and cor[1] > stopCoordinates[1] - 0.03:
+            if IsNearStop(stopCoordinates[0], cor[0]):
+                if IsNearStop(stopCoordinates[1], cor[1]):
                     points.append((cor[0], cor[1]))
-        if len(coordinate) == len(points):
+        if AllThePointsAreNear(coordinate, points):
             draw_line(points)
 
 
-def CreateAllMapFromGeojson(name):
+def CreateAllFromGeojson(name):
     geoJSONMontevideo = f"Code/Data/{name}.geojson"
     montevideo = gpd.read_file(geoJSONMontevideo)
     montevideo.head()
@@ -52,7 +64,6 @@ try:
     token = getToken.token
     print('Recopliando lineas de la parada')
     busesOfStop = getData.GetLinesOfStop('5615', token)
-
     busesOfStopToList = []
 
     for bus in busesOfStop:
@@ -62,6 +73,7 @@ try:
 
     print('Recopliando proximos omnibus')
     nextBusesOfStop = getData.GetNextBusesOfStop('5615', busesOfStopInString, token)
+
 except Exceptions.APIError:
     print("Error al intentar recuparar los datos de la api")
 
@@ -69,10 +81,11 @@ stop = [getData.GetStop(5615)]
 
 if stop != False:
     print('Generando mapa')
-    CreateMapFromJson(stop, 'blue')
-    CreateMapFromJson(nextBusesOfStop, 'red')
+    CreateFromJson(stop, 'blue')
+    CreateFromJson(nextBusesOfStop, 'red')
     print('Generando mapa de Montevideo')
-    CreateMapFromGeojson('montevideoStreets')
+    stopCoordinates = stop[0]['location']['coordinates']
+    CreateFromGeojson('montevideoStreets', stopCoordinates)
 else:
     print("No se encontro la parada deseada")
 
