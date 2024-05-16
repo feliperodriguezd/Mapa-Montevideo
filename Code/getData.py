@@ -50,7 +50,7 @@ def GetLinesOfStop(stop, token):
 
 def GetStop(stopId):
 
-    data = open(f'Data/paradas.json', encoding="utf8")
+    data = open(f'Code/Data/paradas.json', encoding="utf8")
     dataJson = json.load(data)
 
     for stop in dataJson:
