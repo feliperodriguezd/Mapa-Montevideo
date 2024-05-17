@@ -1,9 +1,9 @@
 import http.client
-import tokens
+import credentials
 import json
 
 connection = http.client.HTTPSConnection("api.montevideo.gub.uy")
-payload = f'grant_type=client_credentials&client_id={tokens.clientID}&client_secret={tokens.secretClient}'
+payload = f'grant_type=client_credentials&client_id={credentials.clientID}&client_secret={credentials.secretClient}'
 headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 connection.request("POST", "https://mvdapi-auth.montevideo.gub.uy/auth/realms/pci/protocol/openid-connect/token", payload, headers)
 
