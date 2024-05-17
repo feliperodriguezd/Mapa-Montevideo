@@ -13,12 +13,12 @@ def whichSectionsGenerate(stopCoordinates):
     for num in range(10, 0, -1):
         data = open(f'Code/Data/Montevideo/{str(num)}.geojson', encoding="utf8")
         dataJson = json.load(data)
-        dataJsonLen = len(dataJson)
+        dataJsonLen = len(dataJson['features'])
         coordinateMinus = dataJson['features'][0]['geometry']['coordinates'][0][0]
         coordinateMax = dataJson['features'][dataJsonLen-1]['geometry']['coordinates'][0][0]
-        if xCoordinatePlus < coordinateMinus or xCoordinateMinus < coordinateMinus:
+        if coordinateMinus < xCoordinatePlus < coordinateMax:
             sections.append(num)
-        elif xCoordinatePlus < coordinateMax or xCoordinateMinus < coordinateMax:
+        elif coordinateMinus < xCoordinateMinus < coordinateMax:
             sections.append(num)
     return sections
 
