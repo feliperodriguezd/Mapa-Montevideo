@@ -2,6 +2,25 @@ import getData
 import getToken
 import Exceptions
 import createGraph
+import json
+
+
+def whichSectionsGenerate(stopCoordinates):
+    sections = []
+    xCoordinate = stopCoordinates[0]
+    xCoordinatePlus = xCoordinate + 0.03
+    xCoordinateMinus = xCoordinate - 0.03
+    for num in range(10, 0, -1):
+        data = open(f'Code/Data/Montevideo/{str(num)}.geojson', encoding="utf8")
+        dataJson = json.load(data)
+        dataJsonLen = len(dataJson)
+        coordinateMinus = dataJson['features'][0]['geometry']['coordinates'][0][0]
+        coordinateMax = dataJson['features'][dataJsonLen-1]['geometry']['coordinates'][0][0]
+        if xCoordinatePlus < coordinateMinus or xCoordinateMinus < coordinateMinus:
+            sections.append(num)
+        elif xCoordinatePlus < coordinateMax or xCoordinateMinus < coordinateMax:
+            sections.append(num)
+    return sections
 
 try:
     token = getToken.token
@@ -28,6 +47,7 @@ if stop != False:
     createGraph.CreateFromJson(nextBusesOfStop, 'red')
     print('Generando mapa de Montevideo')
     stopCoordinates = stop[0]['location']['coordinates']
+    sections = whichSectionsGenerate(stopCoordinates) 
     createGraph.CreateFromGeojson('montevideoStreets', stopCoordinates)
     createGraph.ShowGraph()
 else:
