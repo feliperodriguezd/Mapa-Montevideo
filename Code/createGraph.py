@@ -20,13 +20,14 @@ def IsInsideMontevideo(XorY, coordinate):
     else:
         return coordinate < -34.7 and coordinate > -34.95
 
-def CreateFromJson(data, color):
+def CreateFromJson(data, stopCoordinates , color):
     for singleData in data:
         xCoordinate = singleData["location"]["coordinates"][0]
         yCoordinate = singleData["location"]["coordinates"][1]
         if IsInsideMontevideo('x', xCoordinate):
             if IsInsideMontevideo('y', yCoordinate):
-                plt.plot(xCoordinate, yCoordinate, 'o', color=color)
+                if IsNearStop(stopCoordinates[0], xCoordinate):
+                    plt.plot(xCoordinate, yCoordinate, 'o', color=color)
 
 def IsNearStop(stopCoordinate, compareCoordinate):
     return compareCoordinate < stopCoordinate + 0.03 and compareCoordinate > stopCoordinate - 0.03

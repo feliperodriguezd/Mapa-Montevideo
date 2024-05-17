@@ -43,12 +43,13 @@ stop = [getData.GetStop(5615)]
 
 if stop != False:
     print('Generando mapa')
-    createGraph.CreateFromJson(stop, 'blue')
-    createGraph.CreateFromJson(nextBusesOfStop, 'red')
-    print('Generando mapa de Montevideo')
     stopCoordinates = stop[0]['location']['coordinates']
+    createGraph.CreateFromJson(stop, stopCoordinates, 'blue')
+    createGraph.CreateFromJson(nextBusesOfStop, stopCoordinates, 'red')
+    print('Generando mapa de Montevideo')
     sections = whichSectionsGenerate(stopCoordinates) 
-    createGraph.CreateFromGeojson('montevideoStreets', stopCoordinates)
+    for section in sections:
+        createGraph.CreateFromGeojson(f'Montevideo/{str(section)}', stopCoordinates)
     createGraph.ShowGraph()
 else:
     print("No se encontro la parada deseada")
