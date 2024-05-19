@@ -4,22 +4,27 @@ import createGraph
 import AuxiliaryFunctions as AF
 import getToken
 
-
 if __name__ == '__main__':
     try:
         token = getToken.GetToken()
         print('Recopliando lineas de la parada')
-        busesOfStop = getData.GetLinesOfStop('5615', token)
+        stop = AF.GetStop()
+        busesOfStop = getData.GetLinesOfStop(str(stop['busstopId']), token)
         busesOfStopInString = AF.busesListToString(busesOfStop)
 
         print('Recopliando proximos omnibus')
-        nextBusesOfStop = getData.GetNextBusesOfStop('5615', busesOfStopInString, token)
+        nextBusesOfStop = getData.GetNextBusesOfStop(str(stop['busstopId']), busesOfStopInString, token)
     except Exceptions.APIError:
         print("Error al intentar recuparar los datos de la api")
     except Exceptions.APITokenError:
         print("Error al intentar conseguir el token para acceder a los datos de la api")
+    except Exceptions.NoBusStopFound:
+        print("No se encontro parada en esas calles")
+    except Exception as error:
+        print(error)
 
-    stop = [getData.GetStop(5615)]
+
+    stop = [stop]
 
     if stop != False:
         print('Generando mapa')

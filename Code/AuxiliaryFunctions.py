@@ -1,4 +1,5 @@
 import json
+import Exceptions
 
 def whichSectionsGenerate(stopCoordinates):
     sections = []
@@ -23,3 +24,36 @@ def busesListToString(busesOfStop):
         busesOfStopToList.append(bus['line'])
     busesOfStopInString = ",".join(str(elem) for elem in busesOfStopToList)
     return busesOfStopInString
+
+def EstaEnCalle(parada, calle):
+    try:
+        return parada.find(calle) != -1
+    except:
+        return False
+
+def GetStop():
+    data = open(f'Code/Data/paradas.json', encoding="utf8")
+    dataJson = json.load(data)
+    print('¿En que calles esta para parada que busca?')
+    street1 = input("Calle 1: ").upper()
+    street2 = input("Calle 2: ").upper()
+
+    posibleBusStops = []
+    for stop in dataJson:
+        if EstaEnCalle(stop['street1'], street1) or EstaEnCalle(stop['street2'], street1):
+            if EstaEnCalle(stop['street1'], street2) or EstaEnCalle(stop['street2'], street2):
+                posibleBusStops.append(stop)
+    
+    if len(posibleBusStops) > 1:
+        print('¿A cual se refiere?')
+        count = 1
+        for stop in posibleBusStops:
+            print(f'{str(count)}: Calle: ' + stop['street1'] + ' y '  + stop['street2'])
+            count += 1
+        option = int(input("Opcion: "))
+        return posibleBusStops[option-1]
+        
+    elif len(posibleBusStops) == 1:
+        return posibleBusStops[0]
+    else:
+        raise Exceptions.NoBusStopFound

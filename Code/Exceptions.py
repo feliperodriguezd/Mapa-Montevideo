@@ -3,3 +3,6 @@ class APIError(Exception):
 
 class APITokenError(Exception):
     pass
+
+class NoBusStopFound(Exception):
+    pass

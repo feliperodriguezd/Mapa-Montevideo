@@ -46,12 +46,3 @@ def GetLinesOfStop(stop, token):
         raise Exceptions.APIError
 
     return dataInJson
-
-def GetStop(stopId):
-    data = open(f'Code/Data/paradas.json', encoding="utf8")
-    dataJson = json.load(data)
-
-    for stop in dataJson:
-        if stop['busstopId'] == stopId:
-            return stop
-    return False
