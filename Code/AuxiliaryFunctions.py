@@ -48,11 +48,10 @@ def GetStop():
         print('¿A cual se refiere?')
         count = 1
         for stop in posibleBusStops:
-            print(f'{str(count)}: Calle: ' + stop['street1'] + ' y '  + stop['street2'])
+            print(f'{str(count)}: Parada en : ' + stop['street1'] + ' y '  + stop['street2'])
             count += 1
         option = int(input("Opcion: "))
         return posibleBusStops[option-1]
-        
     elif len(posibleBusStops) == 1:
         return posibleBusStops[0]
     else:
