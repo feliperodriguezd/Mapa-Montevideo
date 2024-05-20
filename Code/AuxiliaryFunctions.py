@@ -12,9 +12,9 @@ def whichSectionsGenerate(stopCoordinates):
         dataJsonLen = len(dataJson['features'])
         coordinateMinus = dataJson['features'][0]['geometry']['coordinates'][0][0]
         coordinateMax = dataJson['features'][dataJsonLen-1]['geometry']['coordinates'][0][0]
-        if coordinateMinus < xCoordinatePlus < coordinateMax:
+        if xCoordinateMinus < coordinateMinus < xCoordinatePlus:
             sections.append(num)
-        elif coordinateMinus < xCoordinateMinus < coordinateMax:
+        elif xCoordinateMinus < coordinateMax < xCoordinatePlus:
             sections.append(num)
     return sections
 

@@ -14,6 +14,22 @@ if __name__ == '__main__':
 
         print('Recopliando proximos omnibus')
         nextBusesOfStop = getData.GetNextBusesOfStop(str(stop['busstopId']), busesOfStopInString, token)
+
+        stop = [stop]
+
+        if stop != False:
+            print('Generando mapa')
+            stopCoordinates = stop[0]['location']['coordinates']
+            createGraph.CreateFromJson(stop, stopCoordinates, 'blue')
+            createGraph.CreateFromJson(nextBusesOfStop, stopCoordinates, 'red')
+            print('Generando mapa de Montevideo')
+            sections = AF.whichSectionsGenerate(stopCoordinates) 
+            for section in sections:
+                createGraph.CreateFromGeojson(f'Montevideo/{str(section)}', stopCoordinates)
+            createGraph.ShowGraph()
+        else:
+            print("No se encontro la parada deseada")
+            
     except Exceptions.APIError:
         print("Error al intentar recuparar los datos de la api")
     except Exceptions.APITokenError:
@@ -23,18 +39,3 @@ if __name__ == '__main__':
     except Exception as error:
         print(error)
 
-
-    stop = [stop]
-
-    if stop != False:
-        print('Generando mapa')
-        stopCoordinates = stop[0]['location']['coordinates']
-        createGraph.CreateFromJson(stop, stopCoordinates, 'blue')
-        createGraph.CreateFromJson(nextBusesOfStop, stopCoordinates, 'red')
-        print('Generando mapa de Montevideo')
-        sections = AF.whichSectionsGenerate(stopCoordinates) 
-        for section in sections:
-            createGraph.CreateFromGeojson(f'Montevideo/{str(section)}', stopCoordinates)
-        createGraph.ShowGraph()
-    else:
-        print("No se encontro la parada deseada")
