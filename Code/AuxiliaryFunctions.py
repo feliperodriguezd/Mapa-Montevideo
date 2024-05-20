@@ -48,7 +48,14 @@ def GetStop():
         print('¿A cual se refiere?')
         count = 1
         for stop in posibleBusStops:
-            print(f'{str(count)}: Parada en : ' + stop['street1'] + ' y '  + stop['street2'])
+            try:
+                print(f'{str(count)}: Parada en : ' + stop['street1'] + ' y '  + stop['street2'])
+            except:
+                try:
+                    print(f'{str(count)}: Parada en : ' + stop['street1'])
+                except:
+                    print(f'{str(count)}: Parada en : ' + stop['street2'])
+
             count += 1
         option = int(input("Opcion: "))
         return posibleBusStops[option-1]

@@ -39,7 +39,7 @@ def CreateFromGeojson(name, stopCoordinates):
     geoJSONMontevideo = f"Code/Data/{name}.geojson"
     montevideo = gpd.read_file(geoJSONMontevideo)
     data = gpd.GeoDataFrame.from_features(montevideo)
-    print('Listo carga de datos de Montevideo')
+    print(f'Listo datos de {name}')
     for feature in data.iterfeatures():
         coordinate = feature['geometry']['coordinates']
         points = []
