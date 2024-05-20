@@ -30,6 +30,9 @@ def EstaEnCalle(parada, calle):
         return parada.find(calle) != -1
     except:
         return False
+    
+def IsNull(thing):
+    return thing == None
 
 def GetStop():
     data = open(f'Code/Data/paradas.json', encoding="utf8")
@@ -48,13 +51,14 @@ def GetStop():
         print('¿A cual se refiere?')
         count = 1
         for stop in posibleBusStops:
-            try:
+            if IsNull(stop['street1']):
+                print(f'{str(count)}: Parada en : ' + stop['street2'])
+
+            elif IsNull(stop['street2']):
+                print(f'{str(count)}: Parada en : ' + stop['street1'])
+
+            else:
                 print(f'{str(count)}: Parada en : ' + stop['street1'] + ' y '  + stop['street2'])
-            except:
-                try:
-                    print(f'{str(count)}: Parada en : ' + stop['street1'])
-                except:
-                    print(f'{str(count)}: Parada en : ' + stop['street2'])
 
             count += 1
         option = int(input("Opcion: "))
